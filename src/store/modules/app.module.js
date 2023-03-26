@@ -1,16 +1,23 @@
-const appState = {
+const appModule = {
     state: {
-        loader: 0
+        loader: 0,
+        message: ''
     },
     mutations: {
-        incrementLoader({state}) {
+        incrementLoader(state) {
             state.loader++
         },
-        decrementLoader({state}) {
+        decrementLoader(state) {
             state.loader--
         },
+        setMessage(state, payload) {
+            state.message = payload
+        }
     },
-    getters: {}
+    getters: {
+        message: state => state.message,
+        loader: state => state.loader
+    }
 }
 
-export default appState
+export default appModule

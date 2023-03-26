@@ -1,10 +1,12 @@
 <template>
-  <v-dialog v-if="chosenPackage" v-model='chosenPackage' max-width='500px'>
+  <v-dialog v-if="dialog" v-model='dialog' max-width='500px'>
     <v-card>
+
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color='primary' text @click='closeDialog'>Закрыть</v-btn>
+        <v-btn color='error' text @click='closeDialog'>Close</v-btn>
       </v-card-actions>
+
       <v-card-title>
         <span class='headline'>{{}}</span>
       </v-card-title>
@@ -12,7 +14,6 @@
       <v-card-text>
         <h3>{{}}</h3>
       </v-card-text>
-
 
     </v-card>
   </v-dialog>
@@ -22,7 +23,16 @@
 
 export default {
   name: 'AppMessage',
-  props: ['chosenPackage'],
+  computed: {
+    dialog: {
+      get() {
+        return this.$store.state.packagesData.chosenPackage
+      },
+      set(value) {
+        this.$store.commit('setChosenPackage', value)
+      }
+    }
+  },
 
   methods: {
     closeDialog() {

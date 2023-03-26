@@ -1,12 +1,20 @@
-const packagesNpmModule = {
+import getApi from '@/api/get'
+
+const packagesDataModule = {
     state: {
         chosenPackage: null,
-        packagesNpm: []
+        packagesNpm: [],
+        packageName: '',
+        currentPage: 1,
+        pageSize: 10
     },
     actions: {
-        getPackagesByName({commit}, aer) {
-            console.log(aer)
-            commit('setPackages', aer)
+        async getPackagesByName({commit}, payload) {
+            const result = await getApi.getPackagesByAxios(payload)
+            if (result.data.objects && result.data.objects.length === 0) {
+                commit('setMessage', 'Packages not found')
+            }
+            commit('setPackages', result.data)
         }
     },
     mutations: {
@@ -15,12 +23,23 @@ const packagesNpmModule = {
         },
         setPackages(state, payload) {
             state.packagesNpm = payload
-        }
+        },
+        setPackageName(state, payload) {
+            state.packageName = payload
+        },
+        setCurrentPage(state, payload) {
+            state.currentPage = payload
+        },
+
     },
     getters: {
         chosenPackage: state => state.chosenPackage,
-        packagesNpm: state => state.packagesNpm,
+        packageName: state => state.packageName,
+        currentPage: state => state.currentPage,
+        pageSize: state => state.pageSize,
+        packagesNpmObjects: state => state.packagesNpm.objects || [],
+        totalPackages: state => state.packagesNpm.total || 0,
     }
 }
 
-export default packagesNpmModule
+export default packagesDataModule
